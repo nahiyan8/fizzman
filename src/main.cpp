@@ -49,10 +49,10 @@ int main()
 			}
 			
 		// Handle player movement
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) velPool[playerSlot]->x -= 1.0f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) velPool[playerSlot]->x += 1.0f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) velPool[playerSlot]->y -= 1.0f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) velPool[playerSlot]->y += 1.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) velPool[playerSlot]->x -= 8.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) velPool[playerSlot]->x += 8.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) velPool[playerSlot]->y -= 8.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) velPool[playerSlot]->y += 8.0f;
 		
 		/* - Physics - */
 		delta_time = delta_clock.getElapsedTime().asSeconds();
