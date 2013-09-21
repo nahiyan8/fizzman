@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-m64 -std=c++11 -pedantic -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wno-switch -g -pg
+CPPFLAGS=-Wall -std=c++98 -g #-m64 -std=c++11 -pedantic -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wno-switch -g -pg
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
 SRC=$(wildcard src/*.cpp)
@@ -17,4 +17,4 @@ test:
 	echo -e "\nCC=$(CC)\nLDFLAGS=$(LDFLAGS)\nCFLAGS=$(CFLAGS)\nSRC=$(SRC)\nOBJ=$(OBJ)\n"
 
 clean:
-	rm -vfr bin/* obj/*
+	rm -rfv bin/* obj/*

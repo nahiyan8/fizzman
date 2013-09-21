@@ -1,12 +1,20 @@
 #ifndef POOL_HPP_INCLUDED
 #define POOL_HPP_INCLUDED
 
-#include <stddef.h>
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// ---- DECLARATIONS ---- ////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-template <class T>
-class Pool
+#include <stddef.h>
+#include <iostream>
+
+// Shortness for brevity.. whatever that means..
+typedef unsigned int uint_t;
+
+template <class T> class Pool
 {
 	private:
+		/* -- Variables -- */
 		T *pool;
 		bool *available;
 		size_t size;
@@ -14,95 +22,102 @@ class Pool
 		bool initialised;
 		
 	public:
-		// Constructors and destructors!
-		Pool(unsigned int newSize) : size(newSize)
-		{
-			initialised = false;
-			
-			try
-			{
-				pool = new T [size];
-				available = new bool [size];
-				
-				for (unsigned int slot = 0; slot < size; ++slot)
-					available[slot] = true;
-			}
-			catch ( ... )
-			{
-				pool = nullptr; available = nullptr;
-				return;
-			}
-			
-			initialised = true;
-		}
+		/* -- Public functions -- */
+		Pool() {};
+		Pool(size_t _size);
+		~Pool();
 		
-		~Pool()
-		{
-			if (pool) delete [] pool;
-			if (available) delete [] available;
-		}
+		void create(size_t _size);
+		void destroy();
 		
-		// Returns the first empty slot found or -1 on error!
-		int getEmpty()
-		{
-			if (initialised)
-				for (int slot = 0; slot < size; ++slot)
-					if (available)
-						return slot;
-			
-			return -1;
-		}
+		uint_t allocate	();
+		uint_t allocate	(uint_t slot);
+		void deallocate	(uint_t slot);
 		
-		// Allocates the first empty slot found! (or -1 on error as above!)
-		int allocate()
-		{
-			if (!initialised)
-				return -1;
-			
-			int slot = getEmpty();
-			
-			if (slot != -1)
-				available[slot] = false;
-
-			return slot;
-		}
+		uint_t getAvailable	() const;
+		uint_t getUsed		() const;
 		
-		// Tries to allocate specified slot, returns it back if successful, or -1 if not.
-		int allocate(unsigned int slot)
-		{
-			if (initialised)
-				if (slot < size)
-					if (available[slot])
-					{
-						available[slot] = false;
-						return slot;
-					}
-			
-			return -1;
-		}
+		inline bool isAvailable	(uint_t slot) const;
+		inline bool isUsed		(uint_t slot) const;
+		inline size_t getSize	() const;
 		
-		// DEALLOCATES
-		void deallocate(unsigned int slot)
-		{
-			if (initialised)
-				if (slot < size)
-					available[slot] = true;
-		}
-		
-		inline T* operator[](unsigned int slot)
-		{
-			if (slot < size)
-				if (!available[slot])
-					return pool + slot;
-			
-			return nullptr;
-		}
-		
-		inline unsigned int getSize()
-			{ return size; }
-			
-		inline bool isAvailable(unsigned int slot)
-			{ return available[slot]; }
+		inline T& operator[](uint_t slot);
 };
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////// ---- IMPLEMENTATION ---- ///////////////////////////
+///////////////////// --- CONSTRUCTOR/S & DESTRUCTOR/S --- /////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+template <class T> Pool<T>::Pool(size_t _size)
+{
+	create(_size);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <class T> Pool<T>::~Pool()
+{
+	destroy();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <class T> void Pool<T>::create(size_t _size)
+{
+	if (initialised)
+		return;
+	
+	std::cout << "pool created, size: " << _size << '\n';
+	
+	size = _size;
+	pool = 0;
+	available = 0;
+	
+	try
+	{
+		pool		= new T    [size];
+		available	= new bool [size];
+		
+		for (uint_t slot = 0; slot < size; ++slot)
+			available[slot] = true;
+	}
+	catch ( ... )
+		{ destroy(); }
+	
+	initialised = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <class T> void Pool<T>::destroy()
+{
+	if (pool)		delete [] pool;
+	if (available)	delete [] available;
+	
+	size = 0;
+	initialised = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// --- (DE)ALLOCATION --- ////////////////////////////
+///////////////////////// -- MEMORY (DE)ALLOCATOR/S -- /////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+template <class T> bool Pool<T>::allocate(uint_t slot)
+
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////// -- ALLOCATION INFORMATION -- /////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// --- OPERATOR/S --- //////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 
 #endif
