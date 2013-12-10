@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-Wall -std=c++98 -g #-m64 -std=c++11 -pedantic -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wno-switch -g -pg
+CPPFLAGS=-m64 -std=c++98 -Wpedantic -Wall -Wextra -g -pg
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
 SRC=$(wildcard src/*.cpp)
