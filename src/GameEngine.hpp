@@ -1,22 +1,20 @@
-#ifndef GAMEENGINE_HPP
-#define GAMEENGINE_HPP
+#ifndef GAMEENGINE_HPP_INCLUDED
+#define GAMEENGINE_HPP_INCLUDED
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
-#include "pool.hpp"
+#include <stdint.h>
 
-#define GAME_ERR_DEBUG	0
-#define GAME_ERR_NOTICE	1
-#define GAME_ERR_WARN	2
-#define GAME_ERR_FATAL	3
+#include "pool.hpp"
+#include "diagnostics.hpp"
 
 #define GAME_STATE_RUNNING	(1 << 0)
-#define GAME_STATE_PHYSICS	(1 << 1)
-#define GAME_STATE_RENDERS	(1 << 2)
+#define GAME_STATE_LOADING	(1 << 1)
+#define GAME_STATE_PHYSICS	(1 << 2)
+#define GAME_STATE_RENDER	(1 << 3)
 
-#define QueryState(_state)		(state & _state)
-#define EnableState(_state)		(state |= _state)
-#define DisableState(_state)	(state &= ~_state)
+#define QueryState(_state)   (state & _state)
+#define EnableState(_state)  state |= _state;
+#define DisableState(_state) state &= ~_state;
 
 class GameEngine
 {
@@ -32,8 +30,6 @@ class GameEngine
 	protected:
 		sf::Vector2f rk4(sf::Vector2f position, sf::Vector2f velocity, float time_step);
 		sf::Vector2f euler(sf::Vector2f position, sf::Vector2f velocity, float time_step);
-		
-		void ErrorReport(uint error_level, char error_file[], uint error_line, char message[]);
 		
 	public:
 		GameEngine();
