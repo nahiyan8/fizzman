@@ -8,7 +8,7 @@ void GameEngine::loop()
 	sf::Event event;
 	sf::Clock delta_clock;
 	
-	while (true)
+	while (state.running)
 	{
 		/* -- EVENT HANDLING -- */
 		while (window.pollEvent(event))
@@ -16,6 +16,10 @@ void GameEngine::loop()
 			{
 				case sf::Event::Closed:
 					window.close();
+					state.running = false;
+					return;
+				
+				default:
 					break;
 			}
 		

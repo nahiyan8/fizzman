@@ -4,15 +4,16 @@
 ///////////////////// --- CONSTRUCTOR/S & DESTRUCTOR/S --- /////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-GameEngine::GameEngine() : state(0)
+GameEngine::GameEngine() : state()
 {
 	window.create(sf::VideoMode(1280, 800), "Fizzman: The Barebones");
 	
 	sprites.create(4096);
 	textures.create(4096);
 	velocities.create(4096);
+	// Set defaults!
+	state.running = true;
 	
-	EnableState( GAME_STATE_RUNNING );
 	
 	ReportLog(GAME_LOG_INFO, __FILE__, __LINE__, "GameEngine class initialised");
 }
@@ -21,7 +22,7 @@ GameEngine::GameEngine() : state(0)
 
 GameEngine::~GameEngine()
 {
-	DisableState( GAME_STATE_RUNNING );
+	state.running = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

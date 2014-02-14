@@ -31,8 +31,8 @@ static const struct argp argp_config =
 int main(int argc, char *argv[])
 {
 	// Defaults:
-	quit_on_error    = true;
-	output_threshold = GAME_LOG_WARNING;
+	log_exit      = true;
+	log_threshold = GAME_LOG_WARNING;
 	
 	// Using Argp to parse options, parameters:
 	// ------- struct *argp, argc, *argv[], FLAGS, *NEXT_ARG_INDEX, *INPUT
