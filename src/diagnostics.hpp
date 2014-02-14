@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <error.h>
 
-enum error_level_t {
+enum log_level_t {
 	GAME_LOG_DEBUG   = 0,
 	GAME_LOG_INFO    = 1,
 	GAME_LOG_NOTICE  = 2,
@@ -12,7 +12,7 @@ enum error_level_t {
 	GAME_LOG_FATAL   = 4
 };
 
-static const char error_level_str[][8] = {
+static const char log_level_str[][8] = {
 	"debug",
 	"info",
 	"notice",
@@ -20,23 +20,26 @@ static const char error_level_str[][8] = {
 	"fatal",
 };
 
-// Exit on error if (quit == true); And output if (level >= output_threshold).
-extern bool quit_on_error;
-extern int  output_threshold;
+// log_threshold: Sets the minimum message level required for output.
+// log_exit:      Determines whether the game exits on a fatal error.
+extern bool log_exit;
+extern int  log_threshold;
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @brief: Wrapper for error_at_line(), to check thresholds before calling it.
+/// @brief: Wrapper for error_at_line(), for convenience.
 ////////////////////////////////////////////////////////////////////////////////
-#define ReportLog(level, file, line, message)                                  \
+#define ReportLog(level, message)                                              \
     do {                                                                       \
-      if (level >= output_threshold)                                           \
-      {                                                                        \
-        error_at_line(                                                         \
-                       (level >= GAME_LOG_FATAL && quit_on_error ? level : 0), \
-                       0, file, line,                                          \
-                       "%s: %s", error_level_str[level], message               \
-                     );                                                        \
-      }                                                                        \
+        if (level >= log_threshold)                                            \
+        {                                                                      \
+            error_at_line(                                                     \
+                          (level >= GAME_LOG_FATAL && log_exit ? level : 0),   \
+                                                                               \
+                          0, __FILE__, __LINE__,                               \
+                                                                               \
+                          "%s: %s", log_level_str[level], message              \
+                         );                                                    \
+       }                                                                       \
     } while (0)
 
 #endif

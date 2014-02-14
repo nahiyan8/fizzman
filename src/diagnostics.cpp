@@ -1,4 +1,4 @@
 #include "diagnostics.hpp"
 
-bool quit_on_error;
-int output_threshold;
+bool log_exit;
+int  log_threshold;
