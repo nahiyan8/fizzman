@@ -1,10 +1,9 @@
 #ifndef GAMEENGINE_HPP_INCLUDED
 #define GAMEENGINE_HPP_INCLUDED
 
-#include <SFML/Graphics.hpp>
 #include <stdint.h>
+#include <SFML/Graphics.hpp>
 
-#include "pool.hpp"
 #include "diagnostics.hpp"
 
 #define DEFAULT_TIMESTEP     0.010f // 10ms
@@ -44,25 +43,19 @@ struct settings_t
 class GameEngine
 {
 	private:
-		sf::RenderWindow window;
 		// Common
 		state_t    state;
 		settings_t settings;
 		
-		Pool <sf::Sprite> sprites;
-		Pool <sf::Texture> textures;
-		Pool <sf::Vector2f> velocities;
-		
-	protected:
-		sf::Vector2f rk4(sf::Vector2f position, sf::Vector2f velocity, float time_step);
-		sf::Vector2f euler(sf::Vector2f position, sf::Vector2f velocity, float time_step);
+		// Rendering
+		sf::RenderWindow window;
 		
 	public:
-		GameEngine();
+		 GameEngine();
 		~GameEngine();
 		
 		void loop();
-		void physics(float time_step);
+		void physics(float timestep);
 		void render();
 };
 

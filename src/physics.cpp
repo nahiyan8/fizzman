@@ -2,50 +2,56 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void GameEngine::physics(float time_step)
+void GameEngine::physics(float timestep)
 {
-	sf::Rect <float> intersection;
+	/* The commented out stuff is test code.
+	 * I'm still keeping it here as a guideline until I make something solid. */
 	
-	for (uint i = 0; i < sprites.getSize(); ++i)
-	{
-		if ( sprites.isUsed(i) == false )
-			continue;
-		
-		sprites[i].setPosition( rk4(sprites[i].getPosition(), velocities[i], time_step) * 0.80f );
-		
-		for (uint j = i+1; j < sprites.getSize(); ++j)
+	/*
+	sf::Vector2f pos_f = p.s.getPosition();
+	sf::Vector2f accel_f;
+	
+	sf::Vector2i pos_i(pos_f.x, pos_f.y);
+	sf::Vector2i window_s(window.getSize().x, window.getSize().y);
+	
+	window_s.x -= p.s.getTextureRect().width;
+	window_s.y -= p.s.getTextureRect().height;
+	
+	// Boundary checking
+	if (pos_i.x < 0)           { pos_f.x = 0;        p.v.x *= -0.50f; } else // Left-wide wall
+	if (pos_i.x > window_s.x)  { pos_f.x = window_s.x; p.v.x *= -0.50f; }      // Right-side wall
+	
+	if (pos_i.y < 0) { pos_f.y = 0;        p.v.y *= -1.00f; } // Ceiling
+	else 
+		if (pos_i.y >= window_s.y)                                      // Ground
 		{
-			if ( sprites.isUsed(j) == false )
-				continue;
+			pos_f.y = window_s.y;
 			
-			if ( sprites[i].getGlobalBounds().intersects(sprites[j].getGlobalBounds(), intersection) )
-			{
-				velocities[i].x += intersection.width;
-				velocities[i].y += intersection.height;
-			}
-		}
-	}
+			p.v.x *=  0.90f;
+			p.v.y *= -0.25f;
+		};
+	
+	p.v   += accel_f * timestep;
+	pos_f += p.v     * timestep;
+	
+	p.s.setPosition(pos_f);
+	*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-sf::Vector2f GameEngine::rk4(sf::Vector2f position, sf::Vector2f velocity, float time_step)
+/*
+inline sf::Vector2f GameEngine::rk4(sf::Vector2f position, sf::Vector2f velocity, float timestep)
 {
-	sf::Vector2f k1, k2, k3, k4;
+	sf::Vector2f k1, k2(position), k3(position), k4(position);
 	
-	k1 = velocity;
-	k2 = euler(position, k1, time_step/2.0f);
-	k3 = euler(position, k2, time_step/2.0f);
-	k4 = euler(position, k3, time_step);
+	k1  = velocity;
+	k2 += (velocity * timestep) / 2.0f;
+	k3 += (k2       * timestep) / 2.0f;
+	k4 += (k3       * timestep);
 	
-	return ((k1 + k4 + 2.0f*(k2 + k3)) * time_step) / 6.0f;
+	return ((k1 + k4 + 2.0f*(k2 + k3)) * timestep) / 6.0f;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-sf::Vector2f GameEngine::euler(sf::Vector2f position, sf::Vector2f velocity, float time_step)
-{
-	return (position + (time_step * velocity));
-}
+*/
 
 ////////////////////////////////////////////////////////////////////////////////

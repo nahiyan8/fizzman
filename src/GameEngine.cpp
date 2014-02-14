@@ -8,10 +8,6 @@ GameEngine::GameEngine() : state()
 {
 	window.create(sf::VideoMode(1280, 800), "Fizzman: The Barebones");
 	
-	sprites.create(4096);
-	textures.create(4096);
-	velocities.create(4096);
-	
 	// Set defaults!
 	state.running = true;
 	
