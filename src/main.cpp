@@ -9,21 +9,18 @@
 error_t parser(int key, char *argument, struct argp_state *state);
 
 // argp related structs:
-static const struct argp_option options[] =
+static const struct argp_option argp_options[] =
 {
-	// NAME,    KEY, ARGNAME,   FLAGS, DOC
-	{NULL,        0, NULL,          0, "Debugging options:",                                       0},
-	{"debug",   'd', NULL,          0, "enable debug mode, and '--no-exit --output=d'",            0},
-	{"no-exit", 'n', NULL,          0, "do not exit if a fatal error occurs",                      0},
-	{"output",  'o', "<THRESHOLD>", 0, "set the threshold for outputting logs, threshold=[dinwf]", 0},
+	// NAME,    KEY, ARGNAME, FLAGS, DOC,                                     GROUP;
+	{NULL,        0, NULL,    0,     "Debugging options:",                       0},
+	{"no-exit", 'n', NULL,    0,     "do not exit if a fatal error occurs",      0},
+	{"verbose", 'v', NULL,    0,     "increase verbosity, effective upto -vvvv", 0},
 	{0, 0, 0, 0, 0, 0}
 };
 
 static const struct argp argp_config =
 {
-	options, &parser, NULL,
-	"A SFML game about the wonderful life of Fizzman.",
-	NULL, NULL, NULL
+	argp_options, &parser, NULL, "A game about the wonderful life of Fizzman.", NULL, NULL, NULL
 };
 
 
@@ -34,9 +31,7 @@ int main(int argc, char *argv[])
 	log_exit      = true;
 	log_threshold = GAME_LOG_WARNING;
 	
-	// Using Argp to parse options, parameters:
-	// ------- struct *argp, argc, *argv[], FLAGS, *NEXT_ARG_INDEX, *INPUT
-	argp_parse(&argp_config, argc,    argv,     0,            NULL,   NULL);
+	argp_parse(&argp_config, argc, argv, 0, NULL, NULL);
 	
 	// Declare, initialise and run the engine!
 	GameEngine engine;
@@ -45,38 +40,29 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-// Argument handler, processes arguments using getopt_long.
+// Argument handler, processes arguments using argp.
 error_t parser(int key, char *argument, struct argp_state *state)
 {
-	int temp;
-	
-	state = state;
-	
 	switch (key)
 	{
-		// --debug
-		case 'd':
-			quit_on_error    = false;
-			output_threshold = GAME_LOG_DEBUG;
-			break;
-		
 		// --no-exit
 		case 'n':
-			quit_on_error = false;
+			log_exit = false;
 			break;
 		
-		// --output=<THRESHOLD>
-		case 'o':
-			while (temp < GAME_LOG_FATAL && argument[0] != error_level_str[temp][0])
-				temp++;
-			
-			output_threshold = temp;
+		// --verbose
+		case 'v':
+			log_threshold++;
 			break;
 		
 		// When we get an unknown option.
 		default:
 			return ARGP_ERR_UNKNOWN;
 	}
+	
+	// These statements "use" the variables, so we don't get "unused var" warnings
+	(void) argument;
+	(void) state;
 	
 	return 0;
 }
