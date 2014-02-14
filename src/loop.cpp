@@ -1,12 +1,17 @@
 #include "GameEngine.hpp"
-#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void GameEngine::loop()
 {
+	/* -- VARIABLES -- */
 	sf::Event event;
+	
+	float time_accumulator = 0;
 	sf::Clock delta_clock;
+	
+	/* -- INITIALISATION -- */
+	ReportLog(GAME_LOG_NOTICE, "starting main game loop");
 	
 	while (state.running)
 	{
@@ -24,13 +29,16 @@ void GameEngine::loop()
 			}
 		
 		/* -- TIME MANAGEMENT -- */
-		//std::cerr << '\r' << delta_clock.getElapsedTime().asSeconds();
+		while (time_accumulator >= settings.physics_step)
+			physics(settings.physics_step);
 		
-		physics( 1.0f ); //delta_clock.getElapsedTime().asSeconds() );
+		
 		render();
-
-		//delta_clock.restart();
-		//sf::sleep(sf::milliseconds(1000));
+		
+		time_accumulator += delta_clock.getElapsedTime().asSeconds();
+		                    delta_clock.restart();
+		
+		sf::sleep(sf::seconds(settings.render_step));
 	}
 }
 

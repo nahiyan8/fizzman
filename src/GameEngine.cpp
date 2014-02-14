@@ -11,11 +11,11 @@ GameEngine::GameEngine() : state()
 	sprites.create(4096);
 	textures.create(4096);
 	velocities.create(4096);
+	
 	// Set defaults!
 	state.running = true;
 	
-	
-	ReportLog(GAME_LOG_INFO, __FILE__, __LINE__, "GameEngine class initialised");
+	ReportLog(GAME_LOG_INFO, "GameEngine class initialised");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
