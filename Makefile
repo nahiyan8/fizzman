@@ -1,20 +1,18 @@
 CC=g++
-CPPFLAGS=-m64 -std=c++98 -Wpedantic -Wall -Wextra -g -pg
+CPPFLAGS=-std=c++98 -Wall -Wextra -m64 -O3 -g -pg
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
-SRC=$(wildcard src/*.cpp)
-OBJ=$(patsubst src/%.cpp,obj/%.o,$(SRC))
+SRCS=$(wildcard src/*.cpp)
+OBJS=$(patsubst src/%.cpp,obj/%.o,$(SRCS))
 
-all: $(OBJ)
-	mkdir -p bin/
-	$(CC) $(LDFLAGS) $(OBJ) -o bin/fizzman
+all: $(OBJS)       | bin/
+	$(CC) $(LDFLAGS) $(OBJS) -o bin/fizzman
 
-obj/%.o: src/%.cpp
-	mkdir -p obj/
+obj/%.o: src/%.cpp | obj/
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-test:
-	echo -e "\nCC=$(CC)\nCPPFLAGS=$(CPPFLAGS)\nLDFLAGS=$(LDFLAGS)\nSRC=$(SRC)\nOBJ=$(OBJ)\n"
+bin/ obj/:
+	mkdir -p "$@"
 
 clean:
-	rm -rfv bin/* obj/*
+	rm -fv bin/* obj/*
