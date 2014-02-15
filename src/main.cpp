@@ -15,7 +15,7 @@ static const struct argp_option argp_options[] =
 	{NULL,        0, NULL,    0,     "Debugging options:",                         0},
 	{"no-exit", 'n', NULL,    0,     "do not exit if a fatal error occurs",        0},
 	{"quiet",   'q', NULL,    0,     "decrease verbosity, -qq to disable output.", 0},
-	{"verbose", 'v', NULL,    0,     "increase verbosity, effective upto -vvvv",   0},
+	{"verbose", 'v', NULL,    0,     "increase verbosity, effective upto -vvv",    0},
 	{0, 0, 0, 0, 0, 0}
 };
 
